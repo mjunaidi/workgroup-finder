@@ -34,7 +34,10 @@ public class Initializer implements WebApplicationInitializer {
         org.springframework.web.filter.DelegatingFilterProxy delegatingFilterProxy = new org.springframework.web.filter.DelegatingFilterProxy(
                 "springSecurityFilterChain");
         FilterRegistration.Dynamic securityFilterDynamic = servletContext.addFilter("securityFilter", delegatingFilterProxy);
-        securityFilterDynamic.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
+        if (securityFilterDynamic != null) {
+            securityFilterDynamic.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+        }
     }
 
 }
