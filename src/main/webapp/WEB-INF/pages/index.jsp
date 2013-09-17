@@ -40,6 +40,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href="#home">Home</a></li>
             <li><a data-toggle="modal" data-target="#aboutModal" href="">About</a></li>
+            <li><a href="${pageContext.request.contextPath}/fileUpload">Data Manager</a></li>
           </ul>
           <!-- right navbar links -->
           <ul class="nav navbar-nav navbar-right">

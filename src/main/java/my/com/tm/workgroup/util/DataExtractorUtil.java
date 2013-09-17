@@ -3,6 +3,7 @@ package my.com.tm.workgroup.util;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -21,7 +22,6 @@ public class DataExtractorUtil {
 
     // STATION ID STATION NAME WORKGROUP REGION NON - EXEC EXEC
     public static final String[] DEFAULT_KEYS = { "stationId", "stationName", "workgroup", "region" };
-    public static final String DEFAULT_OUTPUT_DIR = "output";
 
     private static void closeOPCPackage(OPCPackage pkg) {
         if (pkg != null) {
@@ -33,17 +33,11 @@ public class DataExtractorUtil {
         }
     }
 
-    private static void writeData(String filename, JsonArray array) throws IOException {
-        String dir = DEFAULT_OUTPUT_DIR;
-        writeData(dir, filename, array);
-    }
-
-    private static void writeData(String dir, String filename, JsonArray array) throws IOException {
+    private static void writeData(File dir, String filename, JsonArray array) throws IOException {
         // write json array into output file
         Writer writer = null;
         try {
-            String out = (new StringBuilder(dir)).append('/').append(filename).toString();
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(out), "utf-8"));
+            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(dir, filename)), "utf-8"));
             writer.write(array.toString());
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -53,20 +47,20 @@ public class DataExtractorUtil {
         }
     }
 
-    public static void extract(String filename) {
-        extract(filename, true);
+    public static void extract(String filename, File outputDir) {
+        extract(filename, true, outputDir);
     }
 
-    public static void extract(String filename, boolean firstRowIsHeader) {
+    public static void extract(String filename, boolean firstRowIsHeader, File outputDir) {
         File file = new File(filename);
-        extract(file, firstRowIsHeader);
+        extract(file, firstRowIsHeader, outputDir);
     }
 
-    public static String extract(File file, boolean firstRowIsHeader) {
+    public static String extract(File file, boolean firstRowIsHeader, File outputDir) {
         String filename = file.getName();
         String simple = filename.substring(0, filename.lastIndexOf('.'));
         String out = (new StringBuilder(simple)).append(".json").toString();
-        
+
         OPCPackage pkg = null;
         try {
 
@@ -84,26 +78,21 @@ public class DataExtractorUtil {
                 if (begin) {
                     JsonObject json = new JsonObject();
                     int ind = 0;
-                    
-                    //System.out.println(row.getPhysicalNumberOfCells());
-                    
-                    int lastColumnIndex = -1;
-                    
-                    for (Cell cell : row) {
-                        
-                        //System.out.println(cell.getColumnIndex());
 
+                    int lastColumnIndex = -1;
+
+                    for (Cell cell : row) {
                         int currentColumnIndex = cell.getColumnIndex();
                         if (lastColumnIndex < 0) {
                             lastColumnIndex = currentColumnIndex - 1;
                         }
-                        
+
                         int indexDiff = currentColumnIndex - lastColumnIndex;
-                        
+
                         if (indexDiff > 1) {
                             ind += indexDiff - 1;
                         }
-                        
+
                         if (ind < length) {
                             String value = cell.getStringCellValue();
                             if (keys[ind].equals("region")) {
@@ -123,7 +112,7 @@ public class DataExtractorUtil {
                 }
             }
 
-            writeData(out, array);
+            writeData(outputDir, out, array);
         } catch (InvalidFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -134,22 +123,34 @@ public class DataExtractorUtil {
         return out;
     }
 
-    public static void extractFiles(String dir) {
+    public static void extractFiles(String dir, File outputDir) {
         File file = new File(dir);
         if (file != null) {
             boolean firstRowIsHeader = true;
-            
+
             JsonArray array = new JsonArray();
 
             if (file.isDirectory()) {
-                for (File f : file.listFiles()) {
-                    String name = extract(f, firstRowIsHeader);
+                // create new filename filter
+                FilenameFilter fileNameFilter = new FilenameFilter() {
+                    public boolean accept(File dir, String name) {
+                        if (name.lastIndexOf('.') > 0) {
+                            int lastIndex = name.lastIndexOf('.');
+                            String ext = name.substring(lastIndex);
+                            return ".xlsx".equalsIgnoreCase(ext);
+                        }
+                        return false;
+                    }
+                };
+
+                for (File f : file.listFiles(fileNameFilter)) {
+                    String name = extract(f, firstRowIsHeader, outputDir);
                     JsonObject json = new JsonObject();
                     json.addProperty("name", name);
                     array.add(json);
                 }
             } else {
-                String name = extract(file, firstRowIsHeader);
+                String name = extract(file, firstRowIsHeader, outputDir);
                 JsonObject json = new JsonObject();
                 json.addProperty("name", name);
                 array.add(json);
@@ -157,7 +158,7 @@ public class DataExtractorUtil {
 
             String filename = "files.json";
             try {
-                writeData(filename, array);
+                writeData(outputDir, filename, array);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -166,8 +167,8 @@ public class DataExtractorUtil {
 
     public static void main(String[] args) throws Exception {
         String dir = "input";
-        
-        DataExtractorUtil.extractFiles(dir);
+
+        DataExtractorUtil.extractFiles("data", new File(dir));
 
     }
 }

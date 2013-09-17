@@ -8,6 +8,9 @@ angular.module('myApp.navigation', [])
   .when("/home", {
     templateUrl: "content/view.html"
   })
+  .when("/manage", {
+    templateUrl: "content/manage.html"
+  })
   .otherwise({
     redirectTo: "/"
   });
