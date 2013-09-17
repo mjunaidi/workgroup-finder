@@ -1,5 +1,9 @@
 package my.com.tm.workgroup.init;
 
+import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
@@ -12,7 +16,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 public class Initializer implements WebApplicationInitializer {
 
     public void onStartup(ServletContext servletContext) throws ServletException {
-        
+
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(WebAppConfig.class);
         servletContext.addListener(new ContextLoaderListener(ctx));
@@ -25,6 +29,12 @@ public class Initializer implements WebApplicationInitializer {
             servlet.addMapping("/");
             servlet.setLoadOnStartup(1);
         }
+
+        // security filter
+        org.springframework.web.filter.DelegatingFilterProxy delegatingFilterProxy = new org.springframework.web.filter.DelegatingFilterProxy(
+                "springSecurityFilterChain");
+        FilterRegistration.Dynamic securityFilterDynamic = servletContext.addFilter("securityFilter", delegatingFilterProxy);
+        securityFilterDynamic.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
     }
 
 }
