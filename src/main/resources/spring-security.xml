@@ -11,8 +11,9 @@
 
   <authentication-manager>
     <authentication-provider>
+      <password-encoder hash="sha" />
       <user-service>
-        <user name="sysadmin" password="asdf1234!" authorities="ROLE_USER" />
+        <user name="sysadmin" password="c2b0c3f630bdc4f8a3e6b5a8a167e64eba6d0021" authorities="ROLE_USER" />
       </user-service>
     </authentication-provider>
   </authentication-manager>
