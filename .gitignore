@@ -9,3 +9,5 @@
 .project
 .settings/
 target/
+src/main/webapp/data/
+src/main/webapp/WEB-INF/input/

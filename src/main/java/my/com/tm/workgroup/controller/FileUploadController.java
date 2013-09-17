@@ -54,8 +54,27 @@ public class FileUploadController {
     }
     
     // TODO: make file processing into one method
-    private void processFiles() {
+    private void updateData() {
+        String directoryPath = context.getRealPath(INPUT_PATH);
+        String outputDirPath = context.getRealPath(OUTPUT_PATH);
+        File outputDir = new File(outputDirPath);
+
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        } else {
+            // TODO: empty output dir properly
+            boolean deleted = true;
+            for (File file : outputDir.listFiles()) {
+                if (!file.delete()) {
+                    deleted = false;
+                }
+            }
+            if (!deleted) {
+                System.err.println("Not able to empty folder " + outputDir.getAbsolutePath());
+            }
+        }
         
+        DataExtractorUtil.extractFiles(directoryPath, outputDir);
     }
 
     @RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
@@ -89,26 +108,8 @@ public class FileUploadController {
 
                 is = multipartFile.getInputStream();
                 FileUtils.copyInputStreamToFile(is, new File(directory, fileName));
-
-                String outputDirPath = context.getRealPath(OUTPUT_PATH);
-                File outputDir = new File(outputDirPath);
-
-                if (!outputDir.exists()) {
-                    outputDir.mkdirs();
-                } else {
-                    // TODO: empty output dir properly
-                    boolean deleted = true;
-                    for (File file : outputDir.listFiles()) {
-                        if (!file.delete()) {
-                            deleted = false;
-                        }
-                    }
-                    if (!deleted) {
-                        System.err.println("Not able to empty folder " + outputDir.getAbsolutePath());
-                    }
-                }
-
-                DataExtractorUtil.extractFiles(directoryPath, outputDir);
+                
+                updateData();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -135,6 +136,7 @@ public class FileUploadController {
         }
         
         if (deleted) {
+            updateData();
             message = message.append(" is successfully deleted.");
         } else {
             message = message.append(" is not able to be deleted.");
@@ -147,7 +149,7 @@ public class FileUploadController {
 
     // TODO: download the file
     @RequestMapping(value = "/fileUpload/download/{fileName}.{ext}", method = RequestMethod.GET)
-    public ModelAndView deleteTeam(@PathVariable String fileName, @PathVariable String ext, HttpServletResponse response) {
+    public ModelAndView downloadFile(@PathVariable String fileName, @PathVariable String ext, HttpServletResponse response) {
 
         StringBuilder message = new StringBuilder(fileName);
         message = message.append('.').append(ext);

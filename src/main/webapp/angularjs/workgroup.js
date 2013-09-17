@@ -12,7 +12,7 @@ workgroupModule.factory('WorkgroupService', ['$rootScope', '$http', '$location',
   
   WorkgroupService.workgroups = false;
   WorkgroupService.loaded = false;
-  WorkgroupService.dir = 'data/';
+  WorkgroupService.dir = 'datasource/';
   
   WorkgroupService.init = function() {
     var url = WorkgroupService.dir + "files.json";

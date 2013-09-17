@@ -4,6 +4,7 @@
   <groupId>my.com.tm.workgroup</groupId>
   <artifactId>workgroup-finder</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
 
   <name>Workgroup Finder</name>
   <description>A web application that can be used to search/find workgroup.</description>
@@ -13,6 +14,11 @@
     <mysql.connector.version>5.1.21</mysql.connector.version>
     <spring.version>3.1.4.RELEASE</spring.version>
     <spring.security.version>3.1.4.RELEASE</spring.security.version>
+    <maven-war-plugin.version>2.4</maven-war-plugin.version>
+    <jetty-plugin.version>8.1.11.v20130520</jetty-plugin.version>
+    <jetty.port>8080</jetty.port>
+    <jetty.scanIntervalSeconds>10</jetty.scanIntervalSeconds>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
@@ -71,7 +77,7 @@
       <artifactId>jstl</artifactId>
       <version>1.2</version>
     </dependency>
-    
+
     <!-- Test -->
     <dependency>
       <groupId>junit</groupId>
@@ -97,7 +103,7 @@
       <artifactId>poi-ooxml</artifactId>
       <version>3.9</version>
     </dependency>
-    
+
     <!-- File Upload -->
     <dependency>
       <groupId>commons-fileupload</groupId>
@@ -111,6 +117,13 @@
       <artifactId>gson</artifactId>
       <version>2.2.4</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-maven-plugin</artifactId>
+      <version>${jetty-plugin.version}</version>
+    </dependency>
+
   </dependencies>
 
   <repositories>
@@ -127,6 +140,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
+        <version>${maven-war-plugin.version}</version>
         <configuration>
           <archive>
             <manifest>
@@ -140,10 +154,17 @@
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty-plugin.version}</version>
         <configuration>
-          <scanIntervalSeconds>10</scanIntervalSeconds>
+          <scanIntervalSeconds>${jetty.scanIntervalSeconds}</scanIntervalSeconds>
           <stopKey>stop</stopKey>
           <stopPort>9999</stopPort>
+          <connectors>
+            <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+              <port>${jetty.port}</port>
+              <maxIdleTime>60000</maxIdleTime>
+            </connector>
+          </connectors>
         </configuration>
       </plugin>
     </plugins>

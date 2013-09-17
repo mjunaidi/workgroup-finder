@@ -95,9 +95,6 @@ public class DataExtractorUtil {
 
                         if (ind < length) {
                             String value = cell.getStringCellValue();
-                            if (keys[ind].equals("region")) {
-                                System.out.println(value);
-                            }
                             if (value != null && value.trim().length() > 0) {
                                 json.addProperty(keys[ind], value);
                             }
@@ -163,12 +160,5 @@ public class DataExtractorUtil {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        String dir = "input";
-
-        DataExtractorUtil.extractFiles("data", new File(dir));
-
     }
 }
