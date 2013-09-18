@@ -42,17 +42,18 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <c:choose>
-            <c:when test="${username != null}">
-              <a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <b>${username}</b> <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="${pageContext.request.contextPath}/fileUpload">Data Manager</a></li>
-                <li><a href="<c:url value="/j_spring_security_logout" />">Logout</a></li>
-              </ul>
-            </c:when>
-            <c:otherwise>
-              <a href="" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-              <div class="dropdown-menu" ng-include="'${pageContext.request.contextPath}/login'"></div>
-            </c:otherwise>
+              <c:when test="${username != null}">
+                <a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <b>${username}</b> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <%-- <li><a href="${pageContext.request.contextPath}/fileUpload">Data Manager</a></li> --%>
+                  <li><a href="#fileUpload">Data Manager</a></li>
+                  <li><a href="<c:url value="/j_spring_security_logout" />">Logout</a></li>
+                </ul>
+              </c:when>
+              <c:otherwise>
+                <a href="" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+                <div class="dropdown-menu" ng-include="'${pageContext.request.contextPath}/login'"></div>
+              </c:otherwise>
             </c:choose>
           </li>
         </ul>

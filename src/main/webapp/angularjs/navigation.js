@@ -8,8 +8,8 @@ angular.module('myApp.navigation', [])
   .when("/home", {
     templateUrl: "content/view.html"
   })
-  .when("/manage", {
-    templateUrl: "content/manage.html"
+  .when("/fileUpload", {
+    templateUrl: "/fileUpload"
   })
   .otherwise({
     redirectTo: "/"
