@@ -18,6 +18,7 @@
             <th>Station ID</th>
             <th>Station</th>
             <th>Workgroup</th>
+            <th>State</th>
             <th>Region</th>
           </tr>
         </thead>
@@ -28,6 +29,7 @@
             <td>{{ w.stationId }}</td>
             <td>{{ w.stationName }}</td>
             <td>{{ w.workgroup }}</td>
+            <td>{{ w.state }}</td>
             <td>
               <span class="label" ng-class="getBadgeClass(w.region)">{{ w.region }}</span>
             </td>

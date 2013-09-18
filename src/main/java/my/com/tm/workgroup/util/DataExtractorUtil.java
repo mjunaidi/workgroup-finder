@@ -21,7 +21,7 @@ import com.google.gson.JsonObject;
 public class DataExtractorUtil {
 
     // STATION ID STATION NAME WORKGROUP REGION NON - EXEC EXEC
-    public static final String[] DEFAULT_KEYS = { "stationId", "stationName", "workgroup", "region" };
+    public static final String[] DEFAULT_KEYS = { "stationId", "stationName", "workgroup", "region", "state" };
 
     private static void closeOPCPackage(OPCPackage pkg) {
         if (pkg != null) {

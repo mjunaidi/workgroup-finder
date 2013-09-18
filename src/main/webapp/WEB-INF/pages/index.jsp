@@ -12,7 +12,7 @@
   <title>Workgroup Finder</title>
   
   <!-- Bootstrap core CSS -->
-  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="bootstrap/css/bootstrap.cerulean.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="css/offcanvas.css" rel="stylesheet">
