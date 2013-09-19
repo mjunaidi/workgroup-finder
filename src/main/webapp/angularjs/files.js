@@ -28,7 +28,7 @@ filesModule.factory('filesService', ['$rootScope', '$http', '$location', 'Storag
   };
   
   filesService.fetchUploadedFiles = function() {
-    var url = filesService.url + "uploadedFiles";
+    var url = filesService.url + "api/uploadedFiles";
     $http.get(url).
       success(function(data, status, headers, config) {
         filesService.setUploadedFiles(data);
@@ -60,13 +60,24 @@ filesModule.factory('filesService', ['$rootScope', '$http', '$location', 'Storag
       });
   };
   
+  filesService.deleteUploadedFile = function(filename) {
+    var url = filesService.url + "uploadFile/delete/" + filename;
+    
+    $http.get(url).
+      success(function(data, status, headers, config) {
+        filesService.response = data;
+        filesService.fetchUploadedFiles();
+      }).
+      error(function(data, status, headers, config) {
+        console.log(data);
+      });
+  };
+  
   return filesService;
   
 }]);
 
 filesModule.directive('ngFileupload', function($q) {
-  'use strict'
-  
   return {
     restrict: 'A',
     scope: {

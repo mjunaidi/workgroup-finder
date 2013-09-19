@@ -7,6 +7,8 @@
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/angularjs/*</url-pattern>
+    <url-pattern>/angularjs/jquery-1.10.2.min.map</url-pattern>
+    <url-pattern>/jquery-1.10.2.min.map</url-pattern>
     <url-pattern>/assets/*</url-pattern>
     <url-pattern>/bootstrap/*</url-pattern>
     <url-pattern>/css/*</url-pattern>

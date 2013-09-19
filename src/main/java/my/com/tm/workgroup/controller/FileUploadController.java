@@ -37,13 +37,41 @@ public class FileUploadController {
     @Autowired
     ServletContext context;
 
-    @RequestMapping(value = "/ajax/{key}", method = RequestMethod.GET)
+    @RequestMapping(value = "/ajax/api/{key}", method = RequestMethod.GET)
     public ModelAndView ajax(@PathVariable String key) {
         ModelAndView modelAndView = new ModelAndView("ajax");
         if (key != null && !key.trim().isEmpty()) {
             if (key.equals("uploadedFiles")) {
                 modelAndView.addObject("response", getUploadedFilesJson().toString());
             }
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/ajax/uploadFile/delete/{filename}.{ext}", method = RequestMethod.GET)
+    public ModelAndView cmDeleteFile(@PathVariable String filename, @PathVariable String ext) {
+        ModelAndView modelAndView = new ModelAndView("ajax");
+        JsonObject json = new JsonObject();
+        if (filename != null && !filename.trim().isEmpty() && ext != null && !ext.trim().isEmpty()) {
+            String fileNameFormat = "%s.%s";
+            String fileName = String.format(fileNameFormat, filename, ext);
+            boolean deleted = deleteUploadedFile(fileName);
+            if (deleted) {
+                // important! update the data once the file deleted
+                updateData();
+                json.addProperty("status", "OK");
+                String messageFormat = "%s is successfully deleted.";
+                json.addProperty("message", String.format(messageFormat, fileName));
+            } else {
+                json.addProperty("status", "FAIL");
+                String messageFormat = "%s is failed to be deleted.";
+                json.addProperty("message", String.format(messageFormat, fileName));
+            }
+            modelAndView.addObject("response", json.toString());
+        } else {
+            json.addProperty("status", "WARNING");
+            String message = "File not found!";
+            json.addProperty("message", message);
         }
         return modelAndView;
     }
@@ -56,13 +84,13 @@ public class FileUploadController {
         MultipartFile file = fileUpload.getFile();
         String fileName = "The file";
         String message = "";
-        
+
         if (file != null) {
             fileName = file.getOriginalFilename();
         }
-        
+
         JsonObject json = new JsonObject();
-        
+
         if (success) {
             updateData();
             json.addProperty("status", "OK");
@@ -92,11 +120,11 @@ public class FileUploadController {
         ModelAndView modelAndView = new ModelAndView("fileUpload");
 
         boolean success = processUploadedFile(fileUpload);
-        
+
         if (success) {
             updateData();
         }
-        
+
         modelAndView.addObject("uploadedFiles", getUploadedFiles());
 
         return modelAndView;
@@ -107,17 +135,11 @@ public class FileUploadController {
 
         StringBuilder message = new StringBuilder(fileName);
         message = message.append('.').append(ext);
-        
+
         ModelAndView modelAndView = new ModelAndView("fileUpload");
 
-        boolean deleted = false;
-        List<File> files = getUploadedFiles();
-        for (File file : files) {
-            if (file.getName().equals(message.toString())) {
-                deleted = file.delete();
-            }
-        }
-        
+        boolean deleted = deleteUploadedFile(message.toString());
+
         if (deleted) {
             updateData();
             message = message.append(" is successfully deleted.");
@@ -136,13 +158,13 @@ public class FileUploadController {
 
         StringBuilder message = new StringBuilder(fileName);
         message = message.append('.').append(ext);
-        
+
         ModelAndView modelAndView = new ModelAndView("fileUpload");
 
         List<File> files = getUploadedFiles();
         for (File file : files) {
             if (file.getName().equals(message.toString())) {
-                
+
                 // TODO: pushing the file
                 try {
                     InputStream is = new FileInputStream(file);
@@ -153,7 +175,7 @@ public class FileUploadController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                
+
             }
         }
 
@@ -182,10 +204,21 @@ public class FileUploadController {
         }
         return null;
     }
-    
+
+    private boolean deleteUploadedFile(String filename) {
+        boolean deleted = false;
+        List<File> files = getUploadedFiles();
+        for (File file : files) {
+            if (file.getName().equals(filename)) {
+                deleted = file.delete();
+            }
+        }
+        return deleted;
+    }
+
     private boolean processUploadedFile(FileUpload fileUpload) {
         MultipartFile multipartFile = fileUpload.getFile();
-        
+
         String fileName = "";
 
         if (multipartFile != null) {
@@ -211,7 +244,7 @@ public class FileUploadController {
         }
         return false;
     }
-    
+
     private void updateData() {
         String directoryPath = context.getRealPath(INPUT_PATH);
         String outputDirPath = context.getRealPath(OUTPUT_PATH);
@@ -231,10 +264,10 @@ public class FileUploadController {
                 System.err.println("Not able to empty folder " + outputDir.getAbsolutePath());
             }
         }
-        
+
         DataExtractorUtil.extractFiles(directoryPath, outputDir);
     }
-    
+
     private JsonArray getUploadedFilesJson() {
         JsonArray arr = new JsonArray();
         List<File> files = getUploadedFiles();

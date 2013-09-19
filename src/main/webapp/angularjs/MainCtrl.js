@@ -50,7 +50,12 @@ function MainCtrl(Navigation, WorkgroupService, filesService, $filter, $route, $
   // TODO: Resetting the upload form, below is not a good practice
   $scope.resetUploadForm = function() {
     $scope.theFile = false;
-    jQuery('#uploadForm')[0].reset();
+    //jQuery('#uploadForm')[0].reset();
+    var _form = jQuery('#uploadForm');
+    
+    if (_form.length > 0) {
+      _form[0].reset();
+    }
     
     // somehow theFile is inside the form's scope
     if ($scope.fileUploadForm) {
@@ -72,6 +77,12 @@ function MainCtrl(Navigation, WorkgroupService, filesService, $filter, $route, $
   $scope.uploadFile = function(file) {
     if (file) {
       filesService.uploadFile(file);
+    }
+  };
+  
+  $scope.deleteUploadedFile = function(filename) {
+    if (filename) {
+      filesService.deleteUploadedFile(filename);
     }
   };
 
