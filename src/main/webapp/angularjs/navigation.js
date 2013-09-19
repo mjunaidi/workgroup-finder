@@ -11,6 +11,9 @@ angular.module('myApp.navigation', [])
   .when("/fileUpload", {
     templateUrl: "/fileUpload"
   })
+  .when("/manage", {
+    templateUrl: "/content/manage.html"
+  })
   .otherwise({
     redirectTo: "/"
   });

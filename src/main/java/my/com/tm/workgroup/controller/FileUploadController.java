@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 @Controller
 public class FileUploadController {
 
@@ -34,47 +37,46 @@ public class FileUploadController {
     @Autowired
     ServletContext context;
 
-    private File getUploadDir() {
-        String directoryPath = context.getRealPath(INPUT_PATH);
-        File dir = new File(directoryPath);
-        return dir;
-    }
-
-    private List<File> getUploadedFiles() {
-        File dir = getUploadDir();
-        if (dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            List<File> list = new ArrayList<File>(files.length);
-            for (File file : files) {
-                list.add(file);
+    @RequestMapping(value = "/ajax/{key}", method = RequestMethod.GET)
+    public ModelAndView ajax(@PathVariable String key) {
+        ModelAndView modelAndView = new ModelAndView("ajax");
+        if (key != null && !key.trim().isEmpty()) {
+            if (key.equals("uploadedFiles")) {
+                modelAndView.addObject("response", getUploadedFilesJson().toString());
             }
-            return list;
         }
-        return null;
+        return modelAndView;
     }
-    
-    // TODO: make file processing into one method
-    private void updateData() {
-        String directoryPath = context.getRealPath(INPUT_PATH);
-        String outputDirPath = context.getRealPath(OUTPUT_PATH);
-        File outputDir = new File(outputDirPath);
 
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        } else {
-            // TODO: empty output dir properly
-            boolean deleted = true;
-            for (File file : outputDir.listFiles()) {
-                if (!file.delete()) {
-                    deleted = false;
-                }
-            }
-            if (!deleted) {
-                System.err.println("Not able to empty folder " + outputDir.getAbsolutePath());
-            }
+    @RequestMapping(value = "/ajax/uploadFile", method = RequestMethod.POST)
+    public ModelAndView cmFileUpload(@ModelAttribute FileUpload fileUpload) {
+        ModelAndView modelAndView = new ModelAndView("ajax");
+        boolean success = processUploadedFile(fileUpload);
+
+        MultipartFile file = fileUpload.getFile();
+        String fileName = "The file";
+        String message = "";
+        
+        if (file != null) {
+            fileName = file.getOriginalFilename();
         }
         
-        DataExtractorUtil.extractFiles(directoryPath, outputDir);
+        JsonObject json = new JsonObject();
+        
+        if (success) {
+            updateData();
+            json.addProperty("status", "OK");
+            String messageFormat = "%s is successfully uploaded.";
+            message = String.format(messageFormat, fileName);
+        } else {
+            json.addProperty("status", "FAIL");
+            String messageFormat = "%s is failed to be uploaded.";
+            message = String.format(messageFormat, fileName);
+        }
+
+        json.addProperty("message", message);
+        modelAndView.addObject("response", json.toString());
+        return modelAndView;
     }
 
     @RequestMapping(value = "/fileUpload", method = RequestMethod.GET)
@@ -89,31 +91,12 @@ public class FileUploadController {
     public ModelAndView uploadFile(@ModelAttribute FileUpload fileUpload) {
         ModelAndView modelAndView = new ModelAndView("fileUpload");
 
-        MultipartFile multipartFile = fileUpload.getFile();
-
-        String fileName = "";
-
-        if (multipartFile != null) {
-            fileName = multipartFile.getOriginalFilename();
-
-            // TODO: process uploaded file properly
-            InputStream is;
-            try {
-                String directoryPath = context.getRealPath(INPUT_PATH);
-                File directory = new File(directoryPath);
-
-                if (!directory.exists()) {
-                    directory.mkdirs();
-                }
-
-                is = multipartFile.getInputStream();
-                FileUtils.copyInputStreamToFile(is, new File(directory, fileName));
-                
-                updateData();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        boolean success = processUploadedFile(fileUpload);
+        
+        if (success) {
+            updateData();
         }
+        
         modelAndView.addObject("uploadedFiles", getUploadedFiles());
 
         return modelAndView;
@@ -179,5 +162,89 @@ public class FileUploadController {
         modelAndView.addObject("uploadedFiles", getUploadedFiles());
 
         return modelAndView;
+    }
+
+    private File getUploadDir() {
+        String directoryPath = context.getRealPath(INPUT_PATH);
+        File dir = new File(directoryPath);
+        return dir;
+    }
+
+    private List<File> getUploadedFiles() {
+        File dir = getUploadDir();
+        if (dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            List<File> list = new ArrayList<File>(files.length);
+            for (File file : files) {
+                list.add(file);
+            }
+            return list;
+        }
+        return null;
+    }
+    
+    private boolean processUploadedFile(FileUpload fileUpload) {
+        MultipartFile multipartFile = fileUpload.getFile();
+        
+        String fileName = "";
+
+        if (multipartFile != null) {
+            fileName = multipartFile.getOriginalFilename();
+
+            // TODO: process uploaded file properly
+            InputStream is;
+            try {
+                String directoryPath = context.getRealPath(INPUT_PATH);
+                File directory = new File(directoryPath);
+
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
+
+                is = multipartFile.getInputStream();
+                FileUtils.copyInputStreamToFile(is, new File(directory, fileName));
+
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+    
+    private void updateData() {
+        String directoryPath = context.getRealPath(INPUT_PATH);
+        String outputDirPath = context.getRealPath(OUTPUT_PATH);
+        File outputDir = new File(outputDirPath);
+
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        } else {
+            // TODO: empty output dir properly
+            boolean deleted = true;
+            for (File file : outputDir.listFiles()) {
+                if (!file.delete()) {
+                    deleted = false;
+                }
+            }
+            if (!deleted) {
+                System.err.println("Not able to empty folder " + outputDir.getAbsolutePath());
+            }
+        }
+        
+        DataExtractorUtil.extractFiles(directoryPath, outputDir);
+    }
+    
+    private JsonArray getUploadedFilesJson() {
+        JsonArray arr = new JsonArray();
+        List<File> files = getUploadedFiles();
+        if (files != null) {
+            for (File file : files) {
+                JsonObject json = new JsonObject();
+                json.addProperty("name", file.getName());
+                arr.add(json);
+            }
+        }
+        return arr;
     }
 }

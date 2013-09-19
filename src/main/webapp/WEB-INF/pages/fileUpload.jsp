@@ -49,12 +49,12 @@
               </td>
               <td>
                 <a href="${pageContext.request.contextPath}/fileUpload/download/${uploadedFile.name}">
-                  <span class="glyphicon glyphicon-download-alt"></span>
+                  <span class="glyphicon glyphicon-download-alt"></span> Download
                 </a>
               </td>
               <td>
                 <a href="${pageContext.request.contextPath}/fileUpload/delete/${uploadedFile.name}">
-                  <span class="glyphicon glyphicon-floppy-remove"></span>
+                  <span class="glyphicon glyphicon-floppy-remove"></span> Delete
                 </a>
               </td>
             </tr>

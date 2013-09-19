@@ -46,7 +46,8 @@
                 <a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <b>${username}</b> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <%-- <li><a href="${pageContext.request.contextPath}/fileUpload">Data Manager</a></li> --%>
-                  <li><a href="#fileUpload">Data Manager</a></li>
+                  <%-- <li><a href="#fileUpload">Data Manager</a></li> --%>
+                  <li><a href="#manage">Data Manager</a></li>
                   <li><a href="<c:url value="/j_spring_security_logout" />">Logout</a></li>
                 </ul>
               </c:when>
@@ -99,6 +100,7 @@
   <script src="angularjs/navigation.js"></script>
   <script src="angularjs/services.js"></script>
   <script src="angularjs/workgroup.js"></script>
+  <script src="angularjs/files.js"></script>
   <script src="angularjs/MainCtrl.js"></script>
 </body>
 </html>

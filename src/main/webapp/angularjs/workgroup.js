@@ -35,8 +35,6 @@ workgroupModule.factory('WorkgroupService', ['$rootScope', '$http', '$location',
   WorkgroupService.readFiles = function(url) {
     $http.get(url).
       success(function(data, status, headers, config) {
-        console.log(data);
-        
         WorkgroupService.readFilesHelper(data, 0);
       }).
       error(function(data, status, headers, config) {
@@ -59,8 +57,6 @@ workgroupModule.factory('WorkgroupService', ['$rootScope', '$http', '$location',
   WorkgroupService.readData = function(url, files, ind) {
     $http.get(url).
       success(function(data, status, headers, config) {
-        console.log(data);
-        
         WorkgroupService.setWorkgroups(data);
         
         WorkgroupService.readFilesHelper(files, ind);
