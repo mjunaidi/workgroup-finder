@@ -1,7 +1,10 @@
-function MainCtrl(Navigation, WorkgroupService, filesService, $filter, $route, $routeParams, $scope, $location, $http) {
+function MainCtrl(Navigation, WorkgroupService, filesService, UserService, $filter, $route, $routeParams, $scope, $location, $http) {
 
   $scope.WorkgroupService = WorkgroupService;
   $scope.workgroups = WorkgroupService.workgroups;
+  
+  $scope.UserService = UserService;
+  $scope.login = UserService.login;
   
   $scope.filesService = filesService;
   $scope.uploadedFiles = filesService.uploadedFiles;
@@ -21,6 +24,40 @@ function MainCtrl(Navigation, WorkgroupService, filesService, $filter, $route, $
   $scope.initWorkgroups = function() {
     $scope.workgroups = WorkgroupService.workgroups;
   };
+  
+  /* Login */
+  $scope.$on('LoginChange', function(event, msg) {
+    $scope.initLogin();
+    console.log($scope.login);
+    
+    // redirect to index page when logout
+    if ($scope.login) {
+      if (!$scope.login.isLoggedIn) {
+        if ($location.url() == '/manage') {
+          $location.url('/');
+        }
+      }
+    }
+  });
+  
+  $scope.initLogin = function() {
+    $scope.login = UserService.login;
+  };
+  
+  $scope.doLogin = function() {
+    console.log('doLogin -->');
+    if (this.username && this.password) {
+      var _form = jQuery('#loginForm');
+      if (_form.length > 0) {
+        UserService.doLogin(_form);
+      }
+    }
+  };
+  
+  $scope.doLogout = function() {
+    console.log('doLogout -->');
+    UserService.doLogout();
+  }
 
   /* Files */
   $scope.$on('FilesChange', function(event, msg) {

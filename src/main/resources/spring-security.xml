@@ -6,8 +6,8 @@
 
   <http auto-config="true">
     <intercept-url pattern="/fileUpload*" access="ROLE_USER" />
-    <form-login login-page="/login" default-target-url="/" authentication-failure-url="/loginfailed" />
-    <logout logout-success-url="/logout" />
+    <form-login login-page="/login" default-target-url="/ajax/login/isLoggedIn" authentication-failure-url="/loginfailed" always-use-default-target='true' />
+    <logout logout-success-url="/ajax/login/isLoggedIn" />
   </http>
 
   <authentication-manager>

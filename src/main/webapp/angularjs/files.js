@@ -12,9 +12,9 @@ filesModule.factory('filesService', ['$rootScope', '$http', '$location', 'Storag
   
   filesService.uploadedFiles = false;
   filesService.response = false;
+  filesService.url = "/ajax/";
   
   filesService.init = function() {
-    filesService.url = "/ajax/";
     filesService.fetchUploadedFiles();
   };
   
