@@ -114,6 +114,7 @@
   <script src="angularjs/workgroup.js"></script>
   <script src="angularjs/files.js"></script>
   <script src="angularjs/user.js"></script>
+  <script src="angularjs/about.js"></script>
   <script src="angularjs/MainCtrl.js"></script>
 </body>
 </html>

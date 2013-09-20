@@ -15,5 +15,6 @@
     <url-pattern>/js/*</url-pattern>
     <url-pattern>/data/*</url-pattern>
     <url-pattern>/content/*</url-pattern>
+    <url-pattern>/contentdata/*</url-pattern>
   </servlet-mapping>
 </web-app>

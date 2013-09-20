@@ -6,11 +6,20 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title">About</h4>
       </div>
-      <div class="modal-body">
-        <p>Workgroup Finder</p>
-        <p>Version 1.0</p>
-        <p>Authored by: Hafzan Binti Mustafa @ Abdu Razak</p>
-        <p>&copy; TM Berhad 2013</p>
+      <div class="modal-body" ng-if="about">
+        <div class="media">
+          <div class="pull-left">
+            <img class="media-object" ng-src="{{ about.logo }}">
+          </div>
+          <div class="media-body">
+            <h3 class="media-heading">{{ about.name }}</h3>
+            <p class="lead">{{ about.description }}</p>
+          </div>
+        </div>
+        <p>{{ about.version }}</p>
+        <p ng-bind-html-unsafe="about.developer"></p>
+        <p ng-bind-html-unsafe="about.copyright"></p>
+        <p ng-bind-html-unsafe="about.credits"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

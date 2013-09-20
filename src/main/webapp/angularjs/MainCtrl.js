@@ -1,4 +1,4 @@
-function MainCtrl(Navigation, WorkgroupService, filesService, UserService, $filter, $route, $routeParams, $scope, $location, $http) {
+function MainCtrl(Navigation, WorkgroupService, filesService, UserService, AboutService, $filter, $route, $routeParams, $scope, $location, $http) {
 
   $scope.WorkgroupService = WorkgroupService;
   $scope.workgroups = WorkgroupService.workgroups;
@@ -12,6 +12,9 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, $filt
   $scope.fileUploadResponse = false;
   $scope.theFile = false;
   $scope.fileUploadForm = false;
+  
+  $scope.AboutService = AboutService;
+  $scope.about = AboutService.about;
   
   $scope.init = function() {
     
@@ -29,7 +32,6 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, $filt
   /* Login */
   $scope.$on('LoginChange', function(event, msg) {
     $scope.initLogin();
-    console.log($scope.login);
     
     // redirect to index page when logout
     if ($scope.login) {
@@ -127,6 +129,15 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, $filt
     if (filename) {
       filesService.deleteUploadedFile(filename);
     }
+  };
+  
+  /* About */
+  $scope.$on('AboutLoaded', function(event, msg) {
+    $scope.initAbout();
+  });
+  
+  $scope.initAbout = function() {
+    $scope.about = AboutService.about;
   };
 
   /* Misc */

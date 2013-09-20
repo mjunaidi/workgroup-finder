@@ -31,14 +31,12 @@ userModule.factory('UserService', ['$rootScope', '$http', '$location', 'Storage'
   UserService.isLoggedIn = function() {
     var url = UserService.url + 'isLoggedIn';
     $http.get(url).
-    success(function(data, status, headers, config) {
-      console.log(data);
-      
-      UserService.setLogin(data);
-    }).
-    error(function(data, status, headers, config) {
-      console.log(data);
-    });
+      success(function(data, status, headers, config) {
+        UserService.setLogin(data);
+      }).
+      error(function(data, status, headers, config) {
+        console.log(data);
+      });
   };
   
   /**

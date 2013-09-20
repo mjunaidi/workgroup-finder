@@ -1,3 +1,4 @@
-angular.module('myApp', ['myApp.navigation', 'myApp.services', 'myApp.directives', 'myApp.workgroup', 'myApp.files', 'myApp.user'], function($routeProvider, $locationProvider){
-  
+angular.module('myApp', 
+    ['myApp.navigation', 'myApp.services', 'myApp.directives', 'myApp.workgroup', 'myApp.files', 'myApp.user', 'myApp.about'], 
+      function($routeProvider, $locationProvider){
 });
