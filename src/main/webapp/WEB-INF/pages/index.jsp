@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="myApp" ng-controller="MainCtrl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +12,12 @@
   <title>Workgroup Finder</title>
   
   <!-- Bootstrap core CSS -->
-  <link href="bootstrap/css/bootstrap.cerulean.min.css" rel="stylesheet">
+  <link ng-href="bootstrap/css/bootstrap.default.min.css" rel="stylesheet">
+  <link ng-href="bootstrap/css/bootstrap.{{ theme }}.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="css/offcanvas.css" rel="stylesheet">
+  <link href="css/override.css" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -24,7 +26,7 @@
   <![endif]-->
 </head>
 
-<body ng-controller="MainCtrl" ng-init="init()">
+<body ng-init="init()" class="ng-cloak">
   <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
     <div class="container">
       <div class="navbar-header">
@@ -37,6 +39,14 @@
         <ul class="nav navbar-nav">
           <li class="active"><a href="#home">Home</a></li>
           <li><a data-toggle="modal" data-target="#aboutModal" href="">About</a></li>
+          <li class="dropdown">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown">Theme <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li ng-repeat="t in themes"><a href="" ng-click="setTheme(t)">
+                <span ng-if="t === theme" class="glyphicon glyphicon-ok"></span> {{ t }}</a>
+              </li>
+            </ul>
+          </li>
         </ul>
         <!-- right navbar links -->
         <ul class="nav navbar-nav navbar-right">
@@ -47,9 +57,9 @@
               <li><a href="" ng-click="doLogout()">Logout</a></li>
             </ul>
           </li>
-          <li ng-if="!login || !login.isLoggedIn" class="dropdown">
+          <li ng-if="!isLoggedIn" class="dropdown">
             <a href="" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-            <div class="dropdown-menu" ng-include="'content/login.html'"></div>
+            <ul class="dropdown-menu"><li ng-include="'content/login.html'"></li></ul>
           </li>
           <%-- Conventional JSP login method --%>
           <%--

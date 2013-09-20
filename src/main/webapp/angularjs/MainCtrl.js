@@ -16,6 +16,11 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, About
   $scope.AboutService = AboutService;
   $scope.about = AboutService.about;
   
+  $scope.themes = ["default", "amelia", "cerulean", "flatly", "journal", "spacelab"]; // zero-index
+  $scope.themeCount = $scope.themes.length;
+  $scope.themeIndex = 2; // set initial theme index
+  $scope.theme = $scope.themes[$scope.themeIndex];
+  
   $scope.init = function() {
     
   };
@@ -141,6 +146,16 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, About
   };
 
   /* Misc */
+  $scope.changeTheme = function() {
+    $scope.themeIndex = $scope.themeIndex + 1;
+    if ($scope.themeIndex >= $scope.themeCount) {
+      $scope.themeIndex = 0;
+    }
+    $scope.theme = $scope.themes[$scope.themeIndex];
+  };
+  $scope.setTheme = function(theme) {
+    $scope.theme = theme;
+  };
   $scope.getBadgeClass = function(region) {
     region = $filter('lowercase')(region);
     if (region == 'central') return 'label-primary';
@@ -148,6 +163,8 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, About
     if (region == 'northern') return 'label-info';
     if (region == 'southern') return 'label-warning';
     if (region == 'western') return 'label-danger';
+    if (region == 'sabah') return 'label-danger';
+    if (region == 'sarawak') return 'label-default';
     return 'label-default';
   };
   $scope.getAlertClass = function(status) {
