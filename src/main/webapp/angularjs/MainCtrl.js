@@ -16,7 +16,7 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, About
   $scope.AboutService = AboutService;
   $scope.about = AboutService.about;
   
-  $scope.themes = ["default", "amelia", "cerulean", "flatly", "journal", "spacelab"]; // zero-index
+  $scope.themes = ["default", "amelia", "cerulean", "cosmo", "cyborg", "flatly", "journal", "readable", "simplex", "slate", "spacelab", "united"]; // zero-index
   $scope.themeCount = $scope.themes.length;
   $scope.themeIndex = 2; // set initial theme index
   $scope.theme = $scope.themes[$scope.themeIndex];

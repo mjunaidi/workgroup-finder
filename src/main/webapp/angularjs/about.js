@@ -21,22 +21,22 @@ aboutModule.factory('AboutService', ['$rootScope', '$http', '$location', 'Storag
     $rootScope.$broadcast('AboutLoaded');
   };
   
-  AboutService.processCredits = function(about) {
-    var credits = about.credits;
-    var links = about.links;
-    var template = '<a href="{url}" target="_blank">{label}</a>';
+  AboutService.activateLinks = function(str, links) {
+    if (str == undefined || links == undefined) return str;
     
+    var template = '<a href="{url}" target="_blank">{label}</a>';
     for (var i in links) {
       var link = links[i];
       var a = template.replace('{url}', link.url).replace('{label}', link.name);
-      credits = credits.replace(link.name, a);
+      str = str.replace(link.name, a);
     }
       
-    return credits;
+    return str;
   };
   
-  AboutService.setAbout = function(about) {    
-    about.credits = AboutService.processCredits(about)
+  AboutService.setAbout = function(about) {
+    about.credits = AboutService.activateLinks(about.credits, about.links);
+    about.themes = AboutService.activateLinks(about.themes, about.links);
     
     AboutService.about = about;
     AboutService.aboutLoaded();

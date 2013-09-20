@@ -4,8 +4,9 @@
   "description" : "Simplified work group searching",
   "version" : "Version 1.0",
   "developer" : "Developed by: <strong>Hafzan Binti Mustafa @ Abdu Razak</strong>",
-  "copyright" : "&copy; Hafzan 2013",
+  "copyright" : "&copy; Hafzan Binti Mustafa @ Abdu Razak 2013",
   "credits" : "This software is made possible by Java J2EE, Spring framework, Apache Commons, Apache POI, AngularJS, Twitter's Bootstrap and other open source software.",
+  "themes" : "Themes provided by Bootswatch.",
   "links" : [
     {
       "name" : "Java J2EE",
@@ -30,6 +31,10 @@
     {
       "name" : "Twitter's Bootstrap",
       "url" : "http://getbootstrap.com/"
-    }    
+    },
+    {
+      "name" : "Bootswatch",
+      "url" : "http://bootswatch.com/"
+    }
   ]
 }
