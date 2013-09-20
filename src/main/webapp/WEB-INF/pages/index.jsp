@@ -40,7 +40,7 @@
         </ul>
         <!-- right navbar links -->
         <ul class="nav navbar-nav navbar-right">
-          <li ng-if="login && login.isLoggedIn" class="dropdown">
+          <li ng-if="isLoggedIn" class="dropdown">
             <a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <b>{{ login.username }}</b> <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="#manage">Data Manager</a></li>

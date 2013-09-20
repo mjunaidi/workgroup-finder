@@ -1,69 +1,76 @@
-<div class="row">
-    <div class="col-12 col-sm-12 col-lg-12">
-      <h3>Data Manager</h3>
-      
-      <div ng-if="fileUploadResponse" class="alert" ng-class="getAlertClass(fileUploadResponse.status)">{{ fileUploadResponse.message }}</div>
-          
-      <div class="well">
-        <form id="uploadForm" role="form" method="POST" enctype="multipart/form-data" ng-submit="submitUploadForm()">
-          <div class="form-group">
-            <label for="file">Please select an excel file (*.xlsx) to upload</label>
-            <input type="file" name="file" ng-fileupload="theFile" />
-            <p class="help-block">Uploaded file's data is extracted and saved into a file in JSON format.</p>
-          </div>
-          <div ng-if="theFile" ng-show="theFile" class="form-group">
-            <div class="panel panel-primary">
-              <div class="panel-heading">
-                <h3 class="panel-title">Selected file information</h3>
-              </div>
-              <table class="table table-condensed table-hover">
-                <tbody>
-                  <tr>
-                    <th>File name</th><td>{{ theFile.name }}</td>
-                  </tr>
-                  <tr>
-                    <th>Size</th><td>{{ theFile.size }} KB</td>
-                  </tr>
-                  <tr>
-                    <th>Modified date</th><td>{{ theFile.lastModifiedDate | date:'d MMM y h:mm:ss a' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <input type="submit" value="upload" class="btn btn-primary" />
-            <!-- <input type="button" value="upload" class="btn btn-primary" ng-click="uploadFile(theFile)" /> -->
-            <input type="reset" value="cancel" class="btn btn-default" ng-click="resetForm()" />
-          </div>
-        </form>
-      </div>
+<div ng-if="isLoggedIn" class="row">
+  <div class="col-12 col-sm-12 col-lg-12">
+    <h3>Data Manager</h3>
     
-      <table class="table table-striped table-hover table-condensed table-responsive">
-        <thead>
-          <tr>
-            <th>Uploaded Files</th>
-            <th>Download</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="file in uploadedFiles | orderBy:'name'">
-            <td>
-              <a href="/fileUpload/download/{{ file.name }}">{{ file.name }}</a>
-            </td>
-            <td>
-              <a href="/fileUpload/download/{{ file.name }}">
-                <span class="glyphicon glyphicon-download-alt"></span>
-              </a>
-            </td>
-            <td>
-              <a href="" ng-click="deleteUploadedFile(file.name)">
-                <span class="glyphicon glyphicon-floppy-remove"></span>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div ng-if="fileUploadResponse" class="alert" ng-class="getAlertClass(fileUploadResponse.status)">{{ fileUploadResponse.message }}</div>
+        
+    <div class="well">
+      <form id="uploadForm" role="form" method="POST" enctype="multipart/form-data" ng-submit="submitUploadForm()">
+        <div class="form-group">
+          <label for="file">Please select an excel file (*.xlsx) to upload</label>
+          <input type="file" name="file" ng-fileupload="theFile" />
+          <p class="help-block">Uploaded file's data is extracted and saved into a file in JSON format.</p>
+        </div>
+        <div ng-if="theFile" ng-show="theFile" class="form-group">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Selected file information</h3>
+            </div>
+            <table class="table table-condensed table-hover">
+              <tbody>
+                <tr>
+                  <th>File name</th><td>{{ theFile.name }}</td>
+                </tr>
+                <tr>
+                  <th>Size</th><td>{{ theFile.size }} KB</td>
+                </tr>
+                <tr>
+                  <th>Modified date</th><td>{{ theFile.lastModifiedDate | date:'d MMM y h:mm:ss a' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <input type="submit" value="upload" class="btn btn-primary" />
+          <!-- <input type="button" value="upload" class="btn btn-primary" ng-click="uploadFile(theFile)" /> -->
+          <input type="reset" value="cancel" class="btn btn-default" ng-click="resetForm()" />
+        </div>
+      </form>
     </div>
-    <!--/span-->
+  
+    <table class="table table-striped table-hover table-condensed table-responsive">
+      <thead>
+        <tr>
+          <th>Uploaded Files</th>
+          <th>Download</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="file in uploadedFiles | orderBy:'name'">
+          <td>
+            <a href="/fileUpload/download/{{ file.name }}">{{ file.name }}</a>
+          </td>
+          <td>
+            <a href="/fileUpload/download/{{ file.name }}">
+              <span class="glyphicon glyphicon-download-alt"></span>
+            </a>
+          </td>
+          <td>
+            <a href="" ng-click="deleteUploadedFile(file.name)">
+              <span class="glyphicon glyphicon-floppy-remove"></span>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <!--/row-->
+  <!--/span-->
+</div>
+<!--/row-->
+<div ng-if="!isLoggedIn" class="row">
+  <div class="col-12 col-sm-12 col-lg-12">
+    <div class="alert alert-warning">Please log in to view this page!</div>
+  </div>
+  <!--/span-->
+</div>
+<!--/row-->

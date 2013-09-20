@@ -5,6 +5,7 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, $filt
   
   $scope.UserService = UserService;
   $scope.login = UserService.login;
+  $scope.isLoggedIn = false;
   
   $scope.filesService = filesService;
   $scope.uploadedFiles = filesService.uploadedFiles;
@@ -42,6 +43,11 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, $filt
   
   $scope.initLogin = function() {
     $scope.login = UserService.login;
+    if (!$scope.login) {
+      $scope.isLoggedIn = false;
+    } else {
+      $scope.isLoggedIn = $scope.login.isLoggedIn;
+    }
   };
   
   $scope.doLogin = function() {
