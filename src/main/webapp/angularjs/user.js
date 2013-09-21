@@ -51,8 +51,6 @@ userModule.factory('UserService', ['$rootScope', '$http', '$location', 'Storage'
     
     $http.post(url, form.serialize(), config).
       success(function(data, status, headers, config) {
-        console.log(data);
-        
         UserService.setLogin(data);
       }).
       error(function(data, status, headers, config) {

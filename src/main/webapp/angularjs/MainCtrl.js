@@ -16,13 +16,10 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, About
   $scope.AboutService = AboutService;
   $scope.about = AboutService.about;
   
-  $scope.themes = ["default", "amelia", "cerulean", "cosmo", "cyborg", "flatly", "journal", "readable", "simplex", "slate", "spacelab", "united"]; // zero-index
-  $scope.themeCount = $scope.themes.length;
-  $scope.themeIndex = 2; // set initial theme index
-  $scope.theme = $scope.themes[$scope.themeIndex];
+  $scope.isIe = navigator.userAgent.indexOf('MSIE') >= 0;
   
   $scope.init = function() {
-    
+    $scope.initThemes();
   };
   
   /* Workgroup */
@@ -144,18 +141,40 @@ function MainCtrl(Navigation, WorkgroupService, filesService, UserService, About
   $scope.initAbout = function() {
     $scope.about = AboutService.about;
   };
-
-  /* Misc */
+  
+  /* Themes */
+  $scope.initThemes = function() {
+    $scope.themes = ["default", "amelia", "cerulean", "cosmo", "cyborg", "flatly", "journal", "readable", "simplex", "slate", "spacelab", "united"]; // zero-index
+    $scope.themeIndex = 2; // set initial theme index
+    if ($scope.isIe) {
+      $scope.themes = _.without($scope.themes, "cerulean", "slate", "spacelab");
+    }
+    $scope.themeCount = $scope.themes.length;
+    
+    if ($scope.themeIndex >= $scope.themeCount) {
+      $scope.themeIndex = 0;
+    }
+    if ($scope.themeCount > 0) {
+      $scope.theme = $scope.themes[$scope.themeIndex];
+    }
+  };
+  
+  $scope.setTheme = function(theme) {
+    $scope.theme = theme;
+  };
+  
+  /**
+   * Register below method to ng-click in order to have the theme change on a click of a button.
+   */
   $scope.changeTheme = function() {
     $scope.themeIndex = $scope.themeIndex + 1;
     if ($scope.themeIndex >= $scope.themeCount) {
       $scope.themeIndex = 0;
     }
-    $scope.theme = $scope.themes[$scope.themeIndex];
+    $scope.setTheme($scope.themes[$scope.themeIndex]);
   };
-  $scope.setTheme = function(theme) {
-    $scope.theme = theme;
-  };
+
+  /* Misc */
   $scope.getBadgeClass = function(region) {
     region = $filter('lowercase')(region);
     if (region == 'central') return 'label-primary';
