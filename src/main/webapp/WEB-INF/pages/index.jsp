@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:ng="http://angularjs.org" id="ng-app" class="ng-app:myApp" ng-app="myApp" ng-controller="MainCtrl">
 <head>
-  <meta charset="utf-8">
+  <meta charset="ISO-8859-1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -49,17 +49,23 @@
           </li>
         </ul>
         <!-- right navbar links -->
-        <ul class="nav navbar-nav navbar-right">
-          <li ng-if="isLoggedIn" class="dropdown">
+        <ul class="nav navbar-nav navbar-right" ng-switch on="isLoggedIn">
+          <li ng-switch-when="true" class="dropdown">
             <a href="" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> <b>{{ login.username }}</b> <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="#manage">Data Manager</a></li>
-              <li><a href="" ng-click="doLogout()">Logout</a></li>
+              <li ng-switch on="isIe">
+                <a ng-switch-when="true" href="<c:url value="/j_spring_security_logout" />">Logout</a>
+                <a ng-switch-default href="" ng-click="doLogout()">Logout</a>
+              </li>
             </ul>
           </li>
-          <li ng-if="!isLoggedIn" class="dropdown">
+          <li ng-switch-default class="dropdown">
             <a href="" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-            <ul class="dropdown-menu"><li ng-include="'content/login.html'"></li></ul>
+            <ul class="dropdown-menu" ng-switch on="isIe">
+              <li ng-switch-when="true" ng-include="'${pageContext.request.contextPath}/login.html'"></li>
+              <li ng-switch-default ng-include="'content/login.html'"></li>
+            </ul>
           </li>
           <%-- Conventional JSP login method --%>
           <%--

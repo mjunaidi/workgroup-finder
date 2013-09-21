@@ -16,7 +16,7 @@
     <spring.security.version>3.1.4.RELEASE</spring.security.version>
     <maven-war-plugin.version>2.4</maven-war-plugin.version>
     <jetty-plugin.version>8.1.11.v20130520</jetty-plugin.version>
-    <jetty.port>8080</jetty.port>
+    <jetty.port>8282</jetty.port>
     <jetty.scanIntervalSeconds>10</jetty.scanIntervalSeconds>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

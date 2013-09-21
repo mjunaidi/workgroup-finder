@@ -84,23 +84,11 @@ filesModule.directive('ngFileupload', function($q) {
       ngFileupload: '='
     },
     link: function postLink(scope, element, attrs, ctrl) {
-      var applyScope = function(file) {
-        console.log(file);
-        console.log(scope.ngFileupload);
-        console.log(scope.theFile);
-        scope.ngFileupload = file;
-        scope.$apply(function() {
-        });
-        scope.$apply();
-        console.log(scope.ngFileupload);
-        console.log(scope.theFile);
-      };
       element.bind('change', function (evt) {
         var files = evt.target.files;
-        for(var i = 0; i < files.length; i++) {
-          //applyScope(files[i]);
+        if (files != undefined && files.length > 0) {
           scope.$apply(function() {
-            scope.ngFileupload = files[i];
+            scope.ngFileupload = files[0];
           });
         }
       });
