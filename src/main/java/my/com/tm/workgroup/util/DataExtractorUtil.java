@@ -22,6 +22,7 @@ public class DataExtractorUtil {
 
     // STATION ID STATION NAME WORKGROUP REGION NON - EXEC EXEC
     public static final String[] DEFAULT_KEYS = { "stationId", "stationName", "workgroup", "region", "state" };
+    public static final String EMPTY_JSON = "{}";
 
     private static void closeOPCPackage(OPCPackage pkg) {
         if (pkg != null) {
@@ -94,7 +95,15 @@ public class DataExtractorUtil {
                         }
 
                         if (ind < length) {
-                            String value = cell.getStringCellValue();
+                            String value = null;
+                            switch (cell.getCellType()) {
+                            case Cell.CELL_TYPE_NUMERIC:
+                                value = String.format("%1$,.0f", cell.getNumericCellValue());
+                                break;
+                            case Cell.CELL_TYPE_STRING:
+                                value = cell.getStringCellValue();
+                                break;
+                            }
                             if (value != null && value.trim().length() > 0) {
                                 json.addProperty(keys[ind], value);
                             }
@@ -102,7 +111,11 @@ public class DataExtractorUtil {
                         ind++;
                         lastColumnIndex = currentColumnIndex;
                     }
-                    array.add(json);
+
+                    // validate json object, do not add empty json object!
+                    if (!EMPTY_JSON.equals(json.toString())) {
+                        array.add(json);
+                    }
                 }
                 if (firstRowIsHeader) {
                     begin = true;
