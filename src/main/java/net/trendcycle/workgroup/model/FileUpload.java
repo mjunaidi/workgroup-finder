@@ -1,4 +1,4 @@
-package my.com.tm.workgroup.model;
+package net.trendcycle.workgroup.model;
 
 import org.springframework.web.multipart.MultipartFile;
 

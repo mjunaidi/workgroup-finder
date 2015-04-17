@@ -1,4 +1,4 @@
-package my.com.tm.workgroup.controller;
+package net.trendcycle.workgroup.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,16 +52,18 @@ public class DataController {
         message = message.append('.').append(ext);
 
         List<File> files = getDataFiles();
-        for (File file : files) {
-            if (file.getName().equals(message.toString())) {
-                try {
-                    InputStream is = new FileInputStream(file);
-                    IOUtils.copy(is, response.getOutputStream());
-                    response.flushBuffer();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (files != null && !files.isEmpty()) {
+            for (File file : files) {
+                if (file.getName().equals(message.toString())) {
+                    try {
+                        InputStream is = new FileInputStream(file);
+                        IOUtils.copy(is, response.getOutputStream());
+                        response.flushBuffer();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

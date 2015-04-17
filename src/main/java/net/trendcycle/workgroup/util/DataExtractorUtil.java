@@ -1,4 +1,4 @@
-package my.com.tm.workgroup.util;
+package net.trendcycle.workgroup.util;
 
 import java.io.BufferedWriter;
 import java.io.File;

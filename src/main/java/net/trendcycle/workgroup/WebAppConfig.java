@@ -1,4 +1,4 @@
-package my.com.tm.workgroup.init;
+package net.trendcycle.workgroup;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
-@ComponentScan("my.com.tm.workgroup")
+@ComponentScan("net.trendcycle.workgroup")
 @EnableWebMvc
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")

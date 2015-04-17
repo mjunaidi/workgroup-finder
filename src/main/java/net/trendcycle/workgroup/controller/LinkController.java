@@ -1,4 +1,4 @@
-package my.com.tm.workgroup.controller;
+package net.trendcycle.workgroup.controller;
 
 import java.security.Principal;
 

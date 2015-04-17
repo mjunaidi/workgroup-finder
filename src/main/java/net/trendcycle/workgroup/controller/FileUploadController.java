@@ -1,4 +1,4 @@
-package my.com.tm.workgroup.controller;
+package net.trendcycle.workgroup.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,8 +11,8 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
-import my.com.tm.workgroup.model.FileUpload;
-import my.com.tm.workgroup.util.DataExtractorUtil;
+import net.trendcycle.workgroup.model.FileUpload;
+import net.trendcycle.workgroup.util.DataExtractorUtil;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;

@@ -1,4 +1,4 @@
-package my.com.tm.workgroup.init;
+package net.trendcycle.workgroup;
 
 import java.util.EnumSet;
 

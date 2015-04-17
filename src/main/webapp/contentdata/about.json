@@ -1,10 +1,10 @@
 {
   "name" : "Workgroup Finder",
   "logo" : "/assets/ico/apple-touch-icon-57-precomposed.png",
-  "description" : "Simplified work group searching",
+  "description" : "Simplified workgroup searching",
   "version" : "Version 1.0",
-  "developer" : "Developed by: <strong>Hafzan Binti Mustafa @ Abdu Razak</strong>",
-  "copyright" : "&copy; Hafzan Binti Mustafa @ Abdu Razak 2013",
+  "developer" : "Developed by: <strong>Mohd Junaidi Bin Jusoh</strong>",
+  "copyright" : "&copy; Mohd Junaidi Bin Jusoh 2013",
   "credits" : "This software is made possible by Java J2EE, Spring framework, Apache Commons, Apache POI, AngularJS, Twitter's Bootstrap and other open source software.",
   "themes" : "Themes provided by Bootswatch.",
   "links" : [
